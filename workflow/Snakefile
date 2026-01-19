@@ -8,6 +8,9 @@ DATA_DIR = config["data_dir"]
 include: "rules/make_index.smk"
 include: "rules/trajectory_conversion.smk"
 include: "rules/pdb_dump.smk"
+include: "rules/tpr_conv.smk"
+include: "rules/crop_xtc.smk"
+include: "rules/avg_structure.smk"
 
 # Detect all variants
 VARIANT_DIRS = [p for p in glob.glob(f"{DATA_DIR}/*") if os.path.isdir(p)]
@@ -17,4 +20,8 @@ rule all:
     input:
         expand(f"{DATA_DIR}/{{variant}}/index.ndx", variant=VARIANTS),
         expand(f"{DATA_DIR}/{{variant}}/output/{{variant}}-ion.xtc", variant=VARIANTS),
-        expand(f"{DATA_DIR}/{{variant}}/output/{{variant}}-ion.pdb", variant=VARIANTS)
+        expand(f"{DATA_DIR}/{{variant}}/output/{{variant}}-ion.pdb", variant=VARIANTS),
+        expand(f"{DATA_DIR}/{{variant}}/output/{{variant}}-ion.tpr", variant=VARIANTS),
+        expand(f"{DATA_DIR}/{{variant}}/output/{{variant}}-last-50ns.xtc", variant=VARIANTS),
+        expand(f"{DATA_DIR}/{{variant}}/output/{{variant}}-last-50ns-avg.pdb", variant=VARIANTS)
+
